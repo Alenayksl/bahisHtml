@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bahis Oyunu</title>
+</head>
+
+<body>
+    <h2>Bahis Oyunu</h2>
+    <p>Bahis yatırmak istediğiniz miktarı girin ve takımınızı seçin</p>
+
+    <label for="amount">Bahis Miktarı:</label><br>
+    <input type="number" id="amount"><br><br>
+
+    <button id="btnFener" onclick="skor('Fenerbahçe')">Fenerbahçe</button>
+    <button id="btnGala" onclick="skor('Galatasaray')">Galatasaray</button>
+
+    <p id="result"></p>
+    <p id="kasa"></p>
+    <br>
+    <div id="resim"></div>
+
+    <script>
+        let kasa = 1000;
+        document.getElementById("kasa").innerHTML = `Kasa: ${kasa}`;
+
+        function skor(secilenTakim) {
+            const bahisMiktari = parseInt(document.getElementById("amount").value);
+            if (isNaN(bahisMiktari) || bahisMiktari <= 0) {
+                alert("Lütfen geçerli bir bahis miktarı girin!");
+                return;
+            }
+
+            const fenerbahce = Math.floor(Math.random() * 10) + 1;
+            const galatasaray = Math.floor(Math.random() * 10) + 1;
+
+            let kazanan;
+            if (fenerbahce > galatasaray) {
+                kazanan = "Fenerbahçe";
+            } else if (galatasaray > fenerbahce) {
+                kazanan = "Galatasaray";
+            } else {
+                kazanan = "Beraberlik";
+            }
+
+            if (kazanan === secilenTakim) {
+                kasa += bahisMiktari + 200;
+            } else if (kazanan === "Beraberlik") {
+            } else {
+                kasa -= bahisMiktari * 2;
+            }
+
+            let message = `
+                Fenerbahçe: ${fenerbahce}<br>
+                Galatasaray: ${galatasaray}<br>
+                Kazanan: ${kazanan}<br>
+            `;
+
+            document.getElementById("result").innerHTML = message;
+            document.getElementById("kasa").innerHTML = `Kasa: ${kasa}`;
+            if (kasa <= 0) {
+                document.getElementById("btnFener").disabled = true;
+                document.getElementById("btnGala").disabled = true;
+                document.getElementById("result").innerHTML += `<br><strong style="color:red;">Kasa tükendi, oyun bitti canım! 😢</strong>`;
+            }
+            resim(kazanan, secilenTakim);
+        }
+        function resim(kazanan, secilenTakim) {
+            let gifHTML = "";
+            if (kazanan === secilenTakim) {
+                gifHTML = `<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2Z1NGJucWU0YzE4M2thdDIzeTJ0d3B3MXB3dTk5Z2o5Ym9yaHY1biZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LdOyjZ7io5Msw/giphy.gif" alt="Kazandınız!" width="200">`;
+            } else if (kazanan === "Beraberlik") {
+                gifHTML = `<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExem04OGxuZGYxM3VvanYycXc5d2FlcWd5bjQwczRza3F3MHplNWlzOSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/2HtWpp60NQ9CU/giphy.gif" alt="Beraberlik!" width="200">`;
+            } else {
+                gifHTML = `<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3RkaGE2OGY3a3ZtbTRtNWU2NjV5N3M1emFsMnp5ZTMycDBrc3pvcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Km2YiI2mzRKgw/giphy.gif" alt="Kaybettiniz!" width="200">`;
+            }
+            document.getElementById("resim").innerHTML = gifHTML;
+        }
+
+    </script>
+</body>
+
+</html>
